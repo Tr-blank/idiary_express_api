@@ -39,7 +39,7 @@ router.post('/sign_up', handleErrorAsync(async(req, res, next) =>{
 }))
 
 // 登入
-router.post('/sign_in', handleErrorAsync(async (req, res, next) => {
+router.post('/login', handleErrorAsync(async (req, res, next) => {
   const { email, password } = req.body;
   if (!email || !password) {
     return next(appError( 400,'帳號密碼不可為空',next));
