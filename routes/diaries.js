@@ -18,7 +18,7 @@ router.get('/', handleErrorAsync(async (req, res, next) => {
     select: 'account'
   }).populate({
     path: 'identity',
-    select: 'account name avatar'
+    select: 'code_name name avatar'
   }).sort(timeSort);
   handleSuccessRes(res, diaries, '取得成功');
 }));
@@ -31,7 +31,7 @@ router.get('/:id', handleErrorAsync(async (req, res, next) => {
       select: 'account'
     }).populate({
       path: 'identity',
-      select: 'account name avatar'
+      select: 'code_name name avatar'
     });
     handleSuccessRes(res, diaries, '取得成功');
 }));
@@ -40,7 +40,7 @@ router.get('/:id', handleErrorAsync(async (req, res, next) => {
 router.post('/', isAuth, handleErrorAsync(async (req, res, next) => {
     const postData = { 
       ...req.body,
-      user: req.user.id,
+      user: req.user._id,
       content: req.body.content.trim()
     }
     if (postData.content === '') return next(appError(400, 'content 日記內容不可為空值'))
@@ -53,14 +53,14 @@ router.patch('/:id', isAuth, handleErrorAsync(async (req, res, next) => {
     const { id } = req.params;
     const postData = { 
       ...req.body,
-      user: req.user.id,
+      user: req.user._id,
       content: req.body.content.trim()
     }
     if (Object.keys(postData).length === 0) return next(appError(400, '未取得更新資料'))
     if (postData.content) postData.content = postData.content.trim()
     if (postData.content === '') return next(appError(400, 'content 日記內容不可為空值'))
     const diaries = await Diaries.findById(id).populate({ path: 'user', select: 'id' });
-    if (diaries.user.id !== req.user.id) return next(appError(403, '無權限更改此篇日記'))
+    if (diaries.user.id !== req.user._id) return next(appError(403, '無權限更改此篇日記'))
     const updatedPost = await Diaries.findByIdAndUpdate(id, postData, { new: true });
     handleSuccessRes(res, updatedPost, '更新成功');
 }));
@@ -69,7 +69,7 @@ router.patch('/:id', isAuth, handleErrorAsync(async (req, res, next) => {
 router.delete('/:id', isAuth, handleErrorAsync(async (req, res, next) => {
     const { id } = req.params;
     const diaries = await Diaries.findById(id).populate({ path: 'user', select: 'id' });
-    if (diaries.user.id !== req.user.id) return next(appError(403, '無權限刪除此篇日記'))
+    if (diaries.user.id !== req.user._id) return next(appError(403, '無權限刪除此篇日記'))
     const result = await Diaries.findByIdAndDelete(id);
     if (!result) return next(appError(400, `查無此日記ID:${id}`))
     handleSuccessRes(res, result, '刪除成功');

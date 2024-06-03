@@ -7,6 +7,10 @@ const identitySchema = new mongoose.Schema(
       ref:'user',
       required: [true, '使用者資訊不得為空']
     },
+    id: {
+      type: Number,
+      default: new Date()
+    },
     code_name: {
       type: String,
       required: [true, "代號為必填"],

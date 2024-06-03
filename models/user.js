@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema(
   {
+    id: {
+      type: Number,
+      default: new Date()
+    },
     account: {
       type: String,
       required: [true, "帳號為必填"],

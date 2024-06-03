@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const diarySchema = new mongoose.Schema(
   {
+    id: {
+      type: Number,
+      default: new Date()
+    },
     user: {
       type: mongoose.Schema.ObjectId,
       ref:'user',
