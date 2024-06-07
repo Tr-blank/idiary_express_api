@@ -5,7 +5,7 @@ const doc = {
     title: 'IDiary Express API',
     description: 'Description'
   },
-  host: 'https://idiary-express-api.onrender.com/'
+  host: 'https://idiary-express-api.onrender.com'
   // host: 'localhost:3000'
 };
 
