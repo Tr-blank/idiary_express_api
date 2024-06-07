@@ -4,6 +4,8 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
+const swaggerUi = require('swagger-ui-express')
+const swaggerFile = require('./swagger-output.json')
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
@@ -45,6 +47,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/identities', identitiesRouter);
 app.use('/diaries', diariesRouter);
+app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 // 404 查無此路由
 app.use((req, res, next) => {
