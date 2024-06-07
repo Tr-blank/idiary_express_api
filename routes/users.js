@@ -10,7 +10,7 @@ const router = express.Router();
 
 // 註冊
 router.post('/sign_up', handleErrorAsync(async(req, res, next) => {
-  // #swagger.tags = ['Users']
+  // #swagger.tags = ['會員 Users']
   let { email, password, confirmPassword, account } = req.body;
   // 內容皆為必填
   if(!email || !password || !confirmPassword || !account){
@@ -41,7 +41,7 @@ router.post('/sign_up', handleErrorAsync(async(req, res, next) => {
 
 // 登入
 router.post('/login', handleErrorAsync(async (req, res, next) => {
-  // #swagger.tags = ['Users']
+  // #swagger.tags = ['會員 Users']
   const { email, password } = req.body;
   if (!email || !password) {
     return next(appError( 400,'帳號密碼不可為空',next));
@@ -56,7 +56,7 @@ router.post('/login', handleErrorAsync(async (req, res, next) => {
 
 // 重設密碼
 router.post('/updatePassword', isAuth, handleErrorAsync(async(req,res,next)=>{
-  // #swagger.tags = ['Users']
+  // #swagger.tags = ['會員 Users']
   const {password, confirmPassword } = req.body;
   if(password !== confirmPassword){
     return next(appError('400', '密碼不一致！', next));
@@ -71,13 +71,13 @@ router.post('/updatePassword', isAuth, handleErrorAsync(async(req,res,next)=>{
 
 // 取得會員資訊
 router.get('/profile', isAuth, handleErrorAsync(async (req, res, next) =>{
-  // #swagger.tags = ['Users']
+  // #swagger.tags = ['會員 Users']
   handleSuccessRes(res, req.user, '取得成功');
 }))
 
 // 更新會員資訊
 router.patch('/profile', isAuth, handleErrorAsync(async (req, res, next) => {
-  // #swagger.tags = ['Users']
+  // #swagger.tags = ['會員 Users']
   const postData = req.body;
   if (Object.keys(postData).length === 0) return next(appError(400, '未取得更新資料'))
   if (postData.account) postData.account = postData.account.trim()
@@ -88,7 +88,7 @@ router.patch('/profile', isAuth, handleErrorAsync(async (req, res, next) => {
 
 // 取得所有會員
 router.get('/', handleErrorAsync(async (req, res, next) => {
-  // #swagger.tags = ['Users']
+  // #swagger.tags = ['會員 Users']
   const users = await User.find();
   handleSuccessRes(res, users, '取得成功');
 }));

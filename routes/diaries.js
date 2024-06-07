@@ -10,7 +10,7 @@ const router = express.Router();
 
 // 取得所有日記
 router.get('/', handleErrorAsync(async (req, res, next) => {
-  // #swagger.tags = ['Diaries']
+  // #swagger.tags = ['日記 Diaries']
   const { sort, keyword } = req.query;
   const timeSort = sort == 'asc' ? 'createdAt':'-createdAt'
   const query = keyword ? { content: new RegExp(req.query.keyword) } : {};
@@ -26,7 +26,7 @@ router.get('/', handleErrorAsync(async (req, res, next) => {
 
 // 取得單筆日記
 router.get('/:id', handleErrorAsync(async (req, res, next) => {
-  // #swagger.tags = ['Diaries']
+  // #swagger.tags = ['日記 Diaries']
   const { id } = req.params;
   const diaries = await Diaries.findById(id).populate({
     path: 'user',
@@ -40,7 +40,7 @@ router.get('/:id', handleErrorAsync(async (req, res, next) => {
 
 // 新增單筆日記
 router.post('/', isAuth, handleErrorAsync(async (req, res, next) => {
-  // #swagger.tags = ['Diaries']
+  // #swagger.tags = ['日記 Diaries']
   const postData = { 
     ...req.body,
     user: req.user._id,
@@ -53,7 +53,7 @@ router.post('/', isAuth, handleErrorAsync(async (req, res, next) => {
 
 // 更新單筆日記
 router.patch('/:id', isAuth, handleErrorAsync(async (req, res, next) => {
-  // #swagger.tags = ['Diaries']
+  // #swagger.tags = ['日記 Diaries']
   const { id } = req.params;
   const postData = { 
     ...req.body,
@@ -71,7 +71,7 @@ router.patch('/:id', isAuth, handleErrorAsync(async (req, res, next) => {
 
 // 刪除單筆日記
 router.delete('/:id', isAuth, handleErrorAsync(async (req, res, next) => {
-  // #swagger.tags = ['Diaries']
+  // #swagger.tags = ['日記 Diaries']
   const { id } = req.params;
   const diaries = await Diaries.findById(id).populate({ path: 'user', select: 'id' });
   if (diaries.user.id !== req.user._id) return next(appError(403, '無權限刪除此篇日記'))

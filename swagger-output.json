@@ -5,7 +5,7 @@
     "description": "Description",
     "version": "1.0.0"
   },
-  "host": "localhost:3000",
+  "host": "https://idiary-express-api.onrender.com/",
   "basePath": "/",
   "schemes": [
     "http"
@@ -14,7 +14,7 @@
     "/users/sign_up": {
       "post": {
         "tags": [
-          "Users"
+          "會員 Users"
         ],
         "description": "",
         "parameters": [
@@ -50,7 +50,7 @@
     "/users/login": {
       "post": {
         "tags": [
-          "Users"
+          "會員 Users"
         ],
         "description": "",
         "parameters": [
@@ -80,7 +80,7 @@
     "/users/updatePassword": {
       "post": {
         "tags": [
-          "Users"
+          "會員 Users"
         ],
         "description": "",
         "parameters": [
@@ -115,7 +115,7 @@
     "/users/profile": {
       "get": {
         "tags": [
-          "Users"
+          "會員 Users"
         ],
         "description": "",
         "parameters": [
@@ -133,7 +133,7 @@
       },
       "patch": {
         "tags": [
-          "Users"
+          "會員 Users"
         ],
         "description": "",
         "parameters": [
@@ -165,7 +165,7 @@
     "/users/": {
       "get": {
         "tags": [
-          "Users"
+          "會員 Users"
         ],
         "description": "",
         "responses": {
@@ -178,7 +178,7 @@
     "/identities/": {
       "get": {
         "tags": [
-          "Identities"
+          "身份 Identities"
         ],
         "description": "",
         "parameters": [
@@ -201,7 +201,7 @@
       },
       "post": {
         "tags": [
-          "Identities"
+          "身份 Identities"
         ],
         "description": "",
         "parameters": [
@@ -221,7 +221,7 @@
     "/identities/{id}": {
       "get": {
         "tags": [
-          "Identities"
+          "身份 Identities"
         ],
         "description": "",
         "parameters": [
@@ -240,7 +240,7 @@
       },
       "patch": {
         "tags": [
-          "Identities"
+          "身份 Identities"
         ],
         "description": "",
         "parameters": [
@@ -264,7 +264,7 @@
       },
       "delete": {
         "tags": [
-          "Identities"
+          "身份 Identities"
         ],
         "description": "",
         "parameters": [
@@ -290,7 +290,7 @@
     "/diaries/": {
       "get": {
         "tags": [
-          "Diaries"
+          "日記 Diaries"
         ],
         "description": "",
         "parameters": [
@@ -313,7 +313,7 @@
       },
       "post": {
         "tags": [
-          "Diaries"
+          "日記 Diaries"
         ],
         "description": "",
         "parameters": [
@@ -345,7 +345,7 @@
     "/diaries/{id}": {
       "get": {
         "tags": [
-          "Diaries"
+          "日記 Diaries"
         ],
         "description": "",
         "parameters": [
@@ -364,7 +364,7 @@
       },
       "patch": {
         "tags": [
-          "Diaries"
+          "日記 Diaries"
         ],
         "description": "",
         "parameters": [
@@ -400,7 +400,7 @@
       },
       "delete": {
         "tags": [
-          "Diaries"
+          "日記 Diaries"
         ],
         "description": "",
         "parameters": [

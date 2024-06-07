@@ -9,7 +9,7 @@ const router = express.Router();
 
 // 取得所有身份
 router.get('/', handleErrorAsync(async (req, res, next) => {
-  // #swagger.tags = ['Identities']
+  // #swagger.tags = ['身份 Identities']
   const { sort, keyword } = req.query;
   const timeSort = sort == 'asc' ? 'createdAt':'-createdAt'
   const query = keyword ? { content: new RegExp(req.query.keyword) } : {};
@@ -22,7 +22,7 @@ router.get('/', handleErrorAsync(async (req, res, next) => {
 
 // 取得單筆身份
 router.get('/:id', handleErrorAsync(async (req, res, next) => {
-  // #swagger.tags = ['Identities']
+  // #swagger.tags = ['身份 Identities']
   const { id } = req.params;
   const identities = await Identities.findById(id).populate({
     path: 'user',
@@ -33,7 +33,7 @@ router.get('/:id', handleErrorAsync(async (req, res, next) => {
 
 // 新增單筆身份
 router.post('/', isAuth, handleErrorAsync(async (req, res, next) => {
-  // #swagger.tags = ['Identities']
+  // #swagger.tags = ['身份 Identities']
   const postData = { 
     ...req.body,
     user: req.user._id
@@ -48,7 +48,7 @@ router.post('/', isAuth, handleErrorAsync(async (req, res, next) => {
 
 // 更新單筆身份
 router.patch('/:id', isAuth, handleErrorAsync(async (req, res, next) => {
-  // #swagger.tags = ['Identities']
+  // #swagger.tags = ['身份 Identities']
   const { id } = req.params;
   const postData = { 
     ...req.body,
@@ -67,7 +67,7 @@ router.patch('/:id', isAuth, handleErrorAsync(async (req, res, next) => {
 
 // 刪除單筆身份
 router.delete('/:id', isAuth, handleErrorAsync(async (req, res, next) => {
-  // #swagger.tags = ['Identities']
+  // #swagger.tags = ['身份 Identities']
   const { id } = req.params;
   const identities = await Identities.findById(id).populate({ path: 'user', select: 'id' });
   if (Identities.user.id !== req.user._id) return next(appError(403, '無權限刪除此篇身份'))
