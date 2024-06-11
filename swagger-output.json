@@ -5,7 +5,7 @@
     "description": "Description",
     "version": "1.0.0"
   },
-  "host": "https://idiary-express-api.onrender.com/",
+  "host": "https://idiary-express-api.onrender.com",
   "basePath": "/",
   "schemes": [
     "http"
@@ -64,6 +64,33 @@
                   "example": "any"
                 },
                 "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/users/isEmailUnique": {
+      "post": {
+        "tags": [
+          "會員 Users"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
                   "example": "any"
                 }
               }
@@ -149,6 +176,9 @@
               "type": "object",
               "properties": {
                 "account": {
+                  "example": "any"
+                },
+                "email": {
                   "example": "any"
                 }
               }
