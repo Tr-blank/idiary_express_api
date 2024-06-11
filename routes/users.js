@@ -54,6 +54,17 @@ router.post('/login', handleErrorAsync(async (req, res, next) => {
   generateSendJWT(user, 200, res);
 }))
 
+// 檢查信箱是否是唯一
+router.post('/isEmailUnique', handleErrorAsync(async (req, res, next) => {
+  // #swagger.tags = ['會員 Users']
+  const { email } = req.body;
+  const userEmail = await User.findOne({ email });
+  const resData = {
+    isEmailUnique: !userEmail
+  }
+  handleSuccessRes(res, resData, '取得成功');
+}))
+
 // 重設密碼
 router.post('/updatePassword', isAuth, handleErrorAsync(async(req,res,next)=>{
   // #swagger.tags = ['會員 Users']
@@ -81,7 +92,7 @@ router.patch('/profile', isAuth, handleErrorAsync(async (req, res, next) => {
   const postData = req.body;
   if (Object.keys(postData).length === 0) return next(appError(400, '未取得更新資料'))
   if (postData.account) postData.account = postData.account.trim()
-  if (postData.account === '') return next(appError(400, 'account 不可為空值'))
+  if (postData.email) postData.email = postData.email.trim()
   const updatedPost = await User.findByIdAndUpdate(req.user.id, postData, { new: true });
   handleSuccessRes(res, updatedPost, '更新成功');
 }));
