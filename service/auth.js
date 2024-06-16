@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 const appError = require('../service/appError'); 
 const handleErrorAsync = require('../service/handleErrorAsync');
 const User = require('../models/user');
+const Identities = require('../models/identity');
 
   // 是否登入中
 const isAuth = handleErrorAsync(async (req, res, next) => {
@@ -22,7 +23,19 @@ const isAuth = handleErrorAsync(async (req, res, next) => {
   const decoded = await new Promise((resolve,reject)=>{
     jwt.verify(token,process.env.JWT_SECRET,(error, payload)=> error ? reject(error) : resolve(payload))
   })
-  const currentUser = await User.findById(decoded.id);
+  const currentUser = await User.findById(decoded.id)
+  .populate({
+    path: 'current_identity',
+    select: 'id code_name name avatar description'
+  })
+  .populate({
+    path: 'main_identity',
+    select: 'id code_name name avatar'
+  })
+  .populate({
+    path: 'identity',
+    select: 'id code_name name avatar'
+  });
 
   req.user = currentUser;
   next();

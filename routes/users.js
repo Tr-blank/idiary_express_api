@@ -6,6 +6,7 @@ const handleErrorAsync = require('../service/handleErrorAsync');
 const handleSuccessRes = require('../service/handleSuccessRes');
 const { isAuth, generateSendJWT } = require('../service/auth');
 const User = require('../models/user');
+const Identities = require('../models/identity');
 const router = express.Router();
 
 // 註冊
@@ -32,9 +33,18 @@ router.post('/sign_up', handleErrorAsync(async(req, res, next) => {
   // 加密密碼
   password = await bcrypt.hash(req.body.password, 12);
   const newUser = await User.create({
+    account,
     email,
-    password,
-    account
+    password
+  });
+  const newIdentity = await Identities.create({
+    user: newUser._id,
+    code_name: account,
+    name: account
+  });
+  await User.findByIdAndUpdate(newUser._id, {
+    main_identity: newIdentity._id,
+    current_identity: newIdentity._id
   });
   generateSendJWT(newUser, 201, res);
 }))
@@ -74,7 +84,7 @@ router.post('/updatePassword', isAuth, handleErrorAsync(async(req,res,next)=>{
   }
   newPassword = await bcrypt.hash(password, 12);
 
-  const user = await User.findByIdAndUpdate(req.user.id, {
+  const user = await User.findByIdAndUpdate(req.user._id, {
     password: newPassword
   });
   generateSendJWT(user, 200, res)
@@ -93,7 +103,17 @@ router.patch('/profile', isAuth, handleErrorAsync(async (req, res, next) => {
   if (Object.keys(postData).length === 0) return next(appError(400, '未取得更新資料'))
   if (postData.account) postData.account = postData.account.trim()
   if (postData.email) postData.email = postData.email.trim()
-  const updatedPost = await User.findByIdAndUpdate(req.user.id, postData, { new: true });
+  const updatedPost = await User.findByIdAndUpdate(req.user._id, postData, { new: true });
+  handleSuccessRes(res, updatedPost, '更新成功');
+}));
+
+// 更新會員當前身份
+router.patch('/currentIdentity', isAuth, handleErrorAsync(async (req, res, next) => {
+  // #swagger.tags = ['會員 Users']
+  const postData = { 
+    current_identity: req.body.identityID
+  }
+  const updatedPost = await User.findByIdAndUpdate(req.user._id, postData, { new: true });
   handleSuccessRes(res, updatedPost, '更新成功');
 }));
 

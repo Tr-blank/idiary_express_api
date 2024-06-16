@@ -22,12 +22,30 @@ const userSchema = new mongoose.Schema(
       minlength: 8,
       select: false
     },
+    current_identity: {
+      type: mongoose.Schema.ObjectId,
+      ref:'identity',
+      required: false
+    },
+    main_identity: {
+      type: mongoose.Schema.ObjectId,
+      ref:'identity',
+      required: false
+    }
   },
   {
     timestamps: true,
-    versionKey: false
+    versionKey: false,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
   }
 );
+
+userSchema.virtual('identity', {
+  ref: 'identity',
+  foreignField: 'user',
+  localField: '_id'
+})
 
 const User = mongoose.model('user', userSchema);
 
