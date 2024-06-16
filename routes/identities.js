@@ -27,6 +27,9 @@ router.get('/:id', handleErrorAsync(async (req, res, next) => {
   const identities = await Identities.findById(id).populate({
     path: 'user',
     select: 'account'
+  }).populate({
+    path: 'diary',
+    select: 'id title type content'
   });
   handleSuccessRes(res, identities, '取得成功');
 }));

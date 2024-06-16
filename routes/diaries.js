@@ -25,7 +25,7 @@ router.get('/', handleErrorAsync(async (req, res, next) => {
 }));
 
 // 取得單筆日記
-router.get('/:id', handleErrorAsync(async (req, res, next) => {
+router.get('/detail/:id', handleErrorAsync(async (req, res, next) => {
   // #swagger.tags = ['日記 Diaries']
   const { id } = req.params;
   const diaries = await Diaries.findById(id).populate({
@@ -38,11 +38,34 @@ router.get('/:id', handleErrorAsync(async (req, res, next) => {
   handleSuccessRes(res, diaries, '取得成功');
 }));
 
+
+// 取得使用者所有日記
+router.get('/all', isAuth, handleErrorAsync(async (req, res, next) => {
+  // #swagger.tags = ['日記 Diaries']
+  const { sort, keyword, type, identity } = req.query;
+  const timeSort = sort == 'asc' ? 'updatedAt':'-updatedAt'
+  const query = {
+    user: req.user._id,
+    identity: identity,
+    ...type ? { type } : {},
+    ...keyword ? { content: new RegExp(keyword) } : {}
+  }
+  const diaries = await Diaries.find(query).populate({
+    path: 'user',
+    select: 'account'
+  }).populate({
+    path: 'identity',
+    select: '_id code_name name avatar'
+  }).sort(timeSort);
+  handleSuccessRes(res, diaries, '取得成功');
+}));
+
 // 新增單筆日記
 router.post('/', isAuth, handleErrorAsync(async (req, res, next) => {
   // #swagger.tags = ['日記 Diaries']
   const postData = { 
     ...req.body,
+    type: req.body?.type || 'private',
     user: req.user._id,
     content: req.body.content.trim()
   }
@@ -62,9 +85,8 @@ router.patch('/:id', isAuth, handleErrorAsync(async (req, res, next) => {
   }
   if (Object.keys(postData).length === 0) return next(appError(400, '未取得更新資料'))
   if (postData.content) postData.content = postData.content.trim()
-  if (postData.content === '') return next(appError(400, 'content 日記內容不可為空值'))
   const diaries = await Diaries.findById(id).populate({ path: 'user', select: 'id' });
-  if (diaries.user.id !== req.user._id) return next(appError(403, '無權限更改此篇日記'))
+  if (diaries.user._id.toString() !== req.user._id.toString()) return next(appError(403, '無權限更改此篇日記'))
   const updatedPost = await Diaries.findByIdAndUpdate(id, postData, { new: true });
   handleSuccessRes(res, updatedPost, '更新成功');
 }));
@@ -74,7 +96,7 @@ router.delete('/:id', isAuth, handleErrorAsync(async (req, res, next) => {
   // #swagger.tags = ['日記 Diaries']
   const { id } = req.params;
   const diaries = await Diaries.findById(id).populate({ path: 'user', select: 'id' });
-  if (diaries.user.id !== req.user._id) return next(appError(403, '無權限刪除此篇日記'))
+  if (diaries.user._id.toString() !== req.user._id.toString()) return next(appError(403, '無權限刪除此篇日記'))
   const result = await Diaries.findByIdAndDelete(id);
   if (!result) return next(appError(400, `查無此日記ID:${id}`))
   handleSuccessRes(res, result, '刪除成功');

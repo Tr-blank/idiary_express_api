@@ -47,6 +47,13 @@ userSchema.virtual('identity', {
   localField: '_id'
 })
 
+// userSchema.pre(/^find/, function(next) {
+//   this.populate({
+//     path: 'user',
+//     select: 'name id createdAt'
+//   })
+// })
+
 const User = mongoose.model('user', userSchema);
 
 module.exports = User;

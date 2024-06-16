@@ -30,7 +30,7 @@ const diarySchema = new mongoose.Schema(
     },
     type:{
       type: String,
-      default: 'private', // private、public、exchange
+      default: '私人', // 私人、公開、交換
       required: [true, '日記類型不得為空']
     }
   },
@@ -39,6 +39,16 @@ const diarySchema = new mongoose.Schema(
     versionKey: false
   }
 );
+
+// diarySchema.pre(/^find/, function(next) {
+//   this.populate({
+//     path: 'user',
+//     select: 'account _id'
+//   }).populate({
+//     path: 'identity',
+//     select: '_id code_name name avatar'
+//   })
+// })
 
 const diaries = mongoose.model('diary', diarySchema);
 

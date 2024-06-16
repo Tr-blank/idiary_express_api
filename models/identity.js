@@ -35,6 +35,12 @@ const identitySchema = new mongoose.Schema(
   }
 );
 
+identitySchema.virtual('diaries', {
+  ref: 'diary',
+  foreignField: 'identity',
+  localField: '_id'
+})
+
 const identities = mongoose.model('identity', identitySchema);
 
 module.exports = identities;

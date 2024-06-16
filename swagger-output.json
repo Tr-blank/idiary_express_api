@@ -404,7 +404,7 @@
         }
       }
     },
-    "/diaries/{id}": {
+    "/diaries/detail/{id}": {
       "get": {
         "tags": [
           "日記 Diaries"
@@ -423,7 +423,49 @@
             "description": ""
           }
         }
-      },
+      }
+    },
+    "/diaries/all": {
+      "get": {
+        "tags": [
+          "日記 Diaries"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "sort",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "identity",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/diaries/{id}": {
       "patch": {
         "tags": [
           "日記 Diaries"
