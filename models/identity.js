@@ -27,15 +27,29 @@ const identitySchema = new mongoose.Schema(
     description: {
       type: String,
       default: ''
+    },
+    isPublicExchangeDiary: {
+      type: Boolean,
+      default: false
+    },
+    exchangeDiaryConditions : {
+      type: String,
+      default: ''
+    },
+    isPublicFollow: {
+      type: Boolean,
+      default: false
     }
   },
   {
     timestamps: true,
-    versionKey: false
+    versionKey: false,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true }
   }
 );
 
-identitySchema.virtual('diaries', {
+identitySchema.virtual('diary', {
   ref: 'diary',
   foreignField: 'identity',
   localField: '_id'

@@ -9,15 +9,16 @@ const User = require('../models/user')
 const router = express.Router();
 
 // 取得所有日記
-router.get('/', handleErrorAsync(async (req, res, next) => {
+router.get('/public', handleErrorAsync(async (req, res, next) => {
   // #swagger.tags = ['日記 Diaries']
-  const { sort, keyword } = req.query;
+  const { sort, identity, keyword } = req.query;
   const timeSort = sort == 'asc' ? 'createdAt':'-createdAt'
-  const query = keyword ? { content: new RegExp(req.query.keyword) } : {};
+  const query = {
+    type: '公開',
+    ...identity ? { identity } : {},
+    ...keyword ? { content: new RegExp(keyword) } : {}
+  }
   const diaries = await Diaries.find(query).populate({
-    path: 'user',
-    select: 'account'
-  }).populate({
     path: 'identity',
     select: 'code_name name avatar'
   }).sort(timeSort);
@@ -25,13 +26,10 @@ router.get('/', handleErrorAsync(async (req, res, next) => {
 }));
 
 // 取得單筆日記
-router.get('/detail/:id', handleErrorAsync(async (req, res, next) => {
+router.get('/public/:diaryID', handleErrorAsync(async (req, res, next) => {
   // #swagger.tags = ['日記 Diaries']
-  const { id } = req.params;
-  const diaries = await Diaries.findById(id).populate({
-    path: 'user',
-    select: 'account'
-  }).populate({
+  const { diaryID } = req.params;
+  const diaries = await Diaries.findById(diaryID).populate({
     path: 'identity',
     select: 'code_name name avatar'
   });

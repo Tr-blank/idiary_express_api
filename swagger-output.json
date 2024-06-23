@@ -237,7 +237,7 @@
         }
       }
     },
-    "/identities/": {
+    "/identities/public": {
       "get": {
         "tags": [
           "身份 Identities"
@@ -260,16 +260,19 @@
             "description": ""
           }
         }
-      },
-      "post": {
+      }
+    },
+    "/identities/public/{id}": {
+      "get": {
         "tags": [
           "身份 Identities"
         ],
         "description": "",
         "parameters": [
           {
-            "name": "authorization",
-            "in": "header",
+            "name": "id",
+            "in": "path",
+            "required": true,
             "type": "string"
           }
         ],
@@ -349,33 +352,10 @@
         }
       }
     },
-    "/diaries/": {
-      "get": {
-        "tags": [
-          "日記 Diaries"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "keyword",
-            "in": "query",
-            "type": "string"
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "default": {
-            "description": ""
-          }
-        }
-      },
+    "/identities/": {
       "post": {
         "tags": [
-          "日記 Diaries"
+          "身份 Identities"
         ],
         "description": "",
         "parameters": [
@@ -383,18 +363,6 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "content": {
-                  "example": "any"
-                }
-              }
-            }
           }
         ],
         "responses": {
@@ -404,7 +372,7 @@
         }
       }
     },
-    "/diaries/detail/{id}": {
+    "/diaries/public": {
       "get": {
         "tags": [
           "日記 Diaries"
@@ -412,7 +380,37 @@
         "description": "",
         "parameters": [
           {
-            "name": "id",
+            "name": "sort",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "identity",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/diaries/public/{diaryID}": {
+      "get": {
+        "tags": [
+          "日記 Diaries"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "diaryID",
             "in": "path",
             "required": true,
             "type": "string"
@@ -456,6 +454,38 @@
             "name": "authorization",
             "in": "header",
             "type": "string"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/diaries/": {
+      "post": {
+        "tags": [
+          "日記 Diaries"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "authorization",
+            "in": "header",
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "example": "any"
+                }
+              }
+            }
           }
         ],
         "responses": {

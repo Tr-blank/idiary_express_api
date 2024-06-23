@@ -4,15 +4,20 @@ const handleErrorAsync = require('../service/handleErrorAsync');
 const handleSuccessRes = require('../service/handleSuccessRes');
 const { isAuth } = require('../service/auth');
 const Identities = require('../models/identity');
-const User = require('../models/user')
+const Diaries = require('../models/diary');
+const User = require('../models/user');
+const { connections } = require('mongoose');
 const router = express.Router();
 
 // 取得所有身份
-router.get('/', handleErrorAsync(async (req, res, next) => {
+router.get('/public', handleErrorAsync(async (req, res, next) => {
   // #swagger.tags = ['身份 Identities']
   const { sort, keyword } = req.query;
   const timeSort = sort == 'asc' ? 'createdAt':'-createdAt'
-  const query = keyword ? { content: new RegExp(req.query.keyword) } : {};
+  const query = keyword ? { 
+    isPublicExchangeDiary: true,
+    content: new RegExp(req.query.keyword) 
+  } : {};
   const identities = await Identities.find(query).populate({
       path: 'user',
       select: 'account'
@@ -21,17 +26,36 @@ router.get('/', handleErrorAsync(async (req, res, next) => {
 }));
 
 // 取得單筆身份
+router.get('/public/:id', handleErrorAsync(async (req, res, next) => {
+  // #swagger.tags = ['身份 Identities']
+  const { id } = req.params;
+  const identity = await Identities.findById(id).populate({
+    path: 'diary',
+    select: 'id title type content'
+  })
+  const diaries = await Diaries.find({
+    type: '公開',
+    identity: id,
+  })
+  const resData = {
+    identity,
+    publicDiaries: diaries
+  }
+  handleSuccessRes(res, resData, '取得成功');
+}));
+
+// 取得單筆身份
 router.get('/:id', handleErrorAsync(async (req, res, next) => {
   // #swagger.tags = ['身份 Identities']
   const { id } = req.params;
-  const identities = await Identities.findById(id).populate({
+  const identity = await Identities.findById(id).populate({
     path: 'user',
     select: 'account'
   }).populate({
     path: 'diary',
     select: 'id title type content'
   });
-  handleSuccessRes(res, identities, '取得成功');
+  handleSuccessRes(res, identity, '取得成功');
 }));
 
 // 新增單筆身份
