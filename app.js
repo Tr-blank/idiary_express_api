@@ -7,14 +7,16 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const swaggerUi = require('swagger-ui-express')
 const swaggerFile = require('./swagger-output.json')
+dotenv.config({ path: './config.env' })
+
 
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const identitiesRouter = require('./routes/identities');
 const diariesRouter = require('./routes/diaries');
+const uploadRouter = require('./routes/upload');
 
 const isDev = process.env.NODE_ENV.trim() === 'dev'
-dotenv.config({ path: './config.env' })
 
 // 程式出現重大錯誤時
 process.on('uncaughtException', error => {
@@ -49,6 +51,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/identities', identitiesRouter);
 app.use('/diaries', diariesRouter);
+app.use('/upload', uploadRouter);
 app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 // 404 查無此路由
