@@ -79,7 +79,7 @@ router.patch('/:id', isAuth, handleErrorAsync(async (req, res, next) => {
   const postData = { 
     ...req.body,
     user: req.user._id,
-    content: req.body.content.trim()
+    content: req.body.content
   }
   if (Object.keys(postData).length === 0) return next(appError(400, '未取得更新資料'))
   if (postData.content) postData.content = postData.content.trim()
