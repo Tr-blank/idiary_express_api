@@ -65,9 +65,9 @@ router.post('/', isAuth, handleErrorAsync(async (req, res, next) => {
     ...req.body,
     type: req.body?.type || 'private',
     user: req.user._id,
-    content: req.body.content.trim()
+    content: req.body?.content ? req.body?.content.trim() : ''
   }
-  if (postData.content === '') return next(appError(400, 'content 日記內容不可為空值'))
+  // if (postData.content === '') return next(appError(400, 'content 日記內容不可為空值'))
   const newPost = await Diaries.create(postData);
   handleSuccessRes(res, newPost, '新增成功');
 }));
@@ -79,10 +79,10 @@ router.patch('/:id', isAuth, handleErrorAsync(async (req, res, next) => {
   const postData = { 
     ...req.body,
     user: req.user._id,
-    content: req.body.content
+    content: req.body?.content ? req.body?.content.trim() : ''
   }
   if (Object.keys(postData).length === 0) return next(appError(400, '未取得更新資料'))
-  if (postData.content) postData.content = postData.content.trim()
+  // if (postData.content) postData.content = postData.content.trim()
   const diaries = await Diaries.findById(id).populate({ path: 'user', select: 'id' });
   if (diaries.user._id.toString() !== req.user._id.toString()) return next(appError(403, '無權限更改此篇日記'))
   const updatedPost = await Diaries.findByIdAndUpdate(id, postData, { new: true });

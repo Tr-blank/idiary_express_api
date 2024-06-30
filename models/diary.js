@@ -22,7 +22,7 @@ const diarySchema = new mongoose.Schema(
     },
     content:{
       type: String,
-      required: [true, '日記內容不得為空']
+      default: ''
     },
     image:{
       type: String,
